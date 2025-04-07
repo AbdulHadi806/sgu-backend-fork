@@ -20,7 +20,7 @@ const swaggerOptions: SwaggerOptions = {
     security: [{ BearerAuth: [] }],
     servers: [
       {
-        url: "http://localhost:3000/api",
+        url: "http://3.27.190.88/api",
       },
     ],
   },
