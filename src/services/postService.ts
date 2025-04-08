@@ -130,3 +130,7 @@ export const boostPost = async (postId: string): Promise<IPost | null> => {
   post.isPremium = true;
   return post.save();
 };
+
+export const getAllPremiumPosts = async (): Promise<IPost[]> => {
+  return await PostModel.find({ isPremium: true });
+};

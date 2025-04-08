@@ -106,9 +106,10 @@ export const getAllUserChats = async (
 ) => {
   if (_req?.user?.id) {
     try {
-      const chats = await getAllUserChatsService(_req?.user?.id);
+      const chats = await getAllUserChatsService(_req.user.id);
       res.status(200).json(chats);
     } catch (error) {
+      console.error("Chat fetch error:", error);
       res.status(500).json({ error: "Failed to fetch chats" });
     }
   }

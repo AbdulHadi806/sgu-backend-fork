@@ -87,8 +87,8 @@ export const createAccountLink = async (req: Request, res: Response) => {
   try {
     const accountLink = await stripe.accountLinks.create({
       account: stripeAccountId,
-      refresh_url: "http://192.168.8.100:3000/retry-onboarding",
-      return_url: "http://192.168.8.100:3000/onboarding-complete",
+      return_url: "http://192.168.8.100:3000/stripe-redirect",
+      refresh_url: "http://192.168.8.100:3000/stripe-refresh",
       type: "account_onboarding",
     });
 

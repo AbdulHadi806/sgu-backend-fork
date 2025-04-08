@@ -5,6 +5,7 @@ import { authenticateToken } from "../middlewares/authMiddleware";
 
 const router = express.Router();
 
+router.get("/premium", authenticateToken, postController.getPremiumPosts);
 router.get("/", postController.getPosts);
 router.get("/:userId", authenticateToken, postController.getUserPosts);
 router.get("/:postId", authenticateToken, postController.getPostById);

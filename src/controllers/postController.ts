@@ -361,3 +361,38 @@ export const updatePremiumPost = async (req: Request, res: Response) => {
     res.status(500).json({ message: error.message || "Internal server error" });
   }
 };
+
+/**
+ * @swagger
+ * /posts/premium:
+ *   get:
+ *     summary: Retrieve all premium posts
+ *     description: Returns a list of all posts where the isPremium flag is set to true.
+ *     tags:
+ *       - Posts
+ *     responses:
+ *       200:
+ *         description: List of premium posts
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 posts:
+ *                   type: array
+ *                   items:
+ *                     $ref: "#/components/schemas/Post"
+ *       500:
+ *         description: Internal server error
+ */
+
+export const getPremiumPosts = async (req: Request, res: Response) => {
+  try {
+    console.log("preimum4646466464");
+    const premiumPosts = await postService.getAllPremiumPosts();
+
+    res.status(200).json(premiumPosts);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message || "Internal server error" });
+  }
+};

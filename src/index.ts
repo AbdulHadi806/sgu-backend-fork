@@ -1,4 +1,8 @@
-import express, { Application } from "express";
+import express, {
+  Application,
+  Request,
+  Response as ExpressResponse,
+} from "express";
 import { connectDB } from "./config/database";
 import dotenv from "dotenv";
 import routes from "./routes";
@@ -28,6 +32,72 @@ app.use(
   })
 );
 app.use("/api", routes);
+
+app.get("/stripe-redirect", (req: Request, res: ExpressResponse) => {
+  const redirectUrl = "myapp://stripe-redirect";
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="refresh" content="0; url=${redirectUrl}">
+        <title>Redirecting...</title>
+      </head>
+      <body>
+        <p>If you are not redirected automatically, <a href="${redirectUrl}">click here</a>.</p>
+      </body>
+    </html>
+  `);
+});
+
+app.get("/stripe-refresh", (req: Request, res: ExpressResponse) => {
+  const redirectUrl = "myapp://stripe-refresh";
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="refresh" content="0; url=${redirectUrl}">
+        <title>Redirecting...</title>
+      </head>
+      <body>
+        <p>If you are not redirected automatically, <a href="${redirectUrl}">click here</a>.</p>
+      </body>
+    </html>
+  `);
+});
+app.get("/success", (req: Request, res: ExpressResponse) => {
+  const redirectUrl = "myapp://success";
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="refresh" content="0; url=${redirectUrl}">
+        <title>Redirecting...</title>
+      </head>
+      <body>
+        <p>If you are not redirected automatically, <a href="${redirectUrl}">click here</a>.</p>
+      </body>
+    </html>
+  `);
+});
+app.get("/cancel", (req: Request, res: ExpressResponse) => {
+  const redirectUrl = "myapp://cancel";
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="refresh" content="0; url=${redirectUrl}">
+        <title>Redirecting...</title>
+      </head>
+      <body>
+        <p>If you are not redirected automatically, <a href="${redirectUrl}">click here</a>.</p>
+      </body>
+    </html>
+  `);
+});
 
 const startServer = async () => {
   try {
