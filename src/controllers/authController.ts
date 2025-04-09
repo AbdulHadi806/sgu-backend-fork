@@ -1,14 +1,17 @@
 import { Request, Response, NextFunction } from "express";
 import bcrypt from "bcryptjs";
 import { generateToken } from "../services/authService";
-import { findUserByEmail } from "../services/userService";
+import {
+  findUserByEmail,
+  findUserByRegistration,
+} from "../services/userService";
 
 /**
  * @swagger
  * /login:
  *   post:
  *     summary: User login
- *     description: Logs in a user and returns a JWT token.
+ *     description: Logs in a user using email or registration number and returns a JWT token.
  *     tags: [Auth]
  *     requestBody:
  *       required: true
@@ -17,12 +20,12 @@ import { findUserByEmail } from "../services/userService";
  *           schema:
  *             type: object
  *             properties:
- *               email:
+ *               emailOrReg:
  *                 type: string
- *                 example: kami@gmail.com
+ *                 example: kami@gmail.com or REG12345
  *               password:
  *                 type: string
- *                 example: admin123456
+ *                 example: Kami2466
  *     responses:
  *       200:
  *         description: Successful login
@@ -34,8 +37,10 @@ import { findUserByEmail } from "../services/userService";
  *                 token:
  *                   type: string
  *                   example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *                 user:
+ *                   type: object
  *       400:
- *         description: Bad request (missing email or password)
+ *         description: Bad request (missing fields)
  *       404:
  *         description: User not found
  *       401:
@@ -49,16 +54,22 @@ export const login = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  const { email, password } = req.body;
-  console.log(email, "email");
+  const { emailOrReg, password } = req.body;
 
-  if (!email || !password) {
-    res.status(400).json({ message: "Email and password are required" });
+  if (!emailOrReg || !password) {
+    res
+      .status(400)
+      .json({ message: "Email/Registration and password are required" });
     return;
   }
 
   try {
-    const user = await findUserByEmail(email);
+    // Determine if it's an email or a registration number
+    const isEmail = /\S+@\S+\.\S+/.test(emailOrReg);
+    const user = isEmail
+      ? await findUserByEmail(emailOrReg)
+      : await findUserByRegistration(emailOrReg);
+
     if (!user) {
       res.status(404).json({ message: "User not found" });
       return;
